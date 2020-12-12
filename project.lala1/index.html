@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="Aubrey MacMillan" />
+    
+    <link rel="shortcut icon" type="image/x-icon" href="../img/favicon.ico">
+    <title>Project 1: Exploratory Data Analysis</title>
+    <meta name="generator" content="Hugo 0.79.0" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="../css/main.css" />
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,400,200bold,400old" />
+    
+    <!--[if lt IE 9]>
+			<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+			<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+		<![endif]-->
+
+    
+  </head>
+
+  <body>
+    <div id="wrap">
+      
+      <nav class="navbar navbar-default">
+  <div class="container">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="../"><i class="fa fa-home"></i></a>
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <div class="navbar-collapse collapse" id="navbar">
+      <ul class="nav navbar-nav navbar-right">
+      
+        
+        <li><a href="../post/">BLOG</a></li>
+        
+        <li><a href="../projects/">PROJECTS</a></li>
+        
+        <li><a href="../resume/">RESUME</a></li>
+        
+      
+      </ul>
+    </div>
+  </div>
+</nav>
+
+      <div class="container">
+        <div class="blog-post">
+          <h3>
+            <strong><a href="../project.lala1/">Project 1: Exploratory Data Analysis</a></strong>
+          </h3>
+        </div>
+ 
+<div class="blog-title">
+          <h4>
+         January 1, 0001 
+            &nbsp;&nbsp;
+            
+          </h4>
+        </div>
+
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <div class="blogpost">
+              
+
+
+<div id="data-wrangling-and-data-exploration" class="section level2">
+<h2>Data Wrangling and Data Exploration</h2>
+<div id="instructions" class="section level3">
+<h3>Instructions</h3>
+<p>A knitted R Markdown document (ideally HTML) and the raw R Markdown file (as .Rmd) should both be submitted to Canvas by 11:59pm on 10/11/2020. These two documents will be graded jointly, so they must be consistent (i.e., don’t change the R Markdown file without also updating the knitted document).</p>
+<p>The text of the document should provide a narrative structure around your code/output. All results presented must have corresponding code. Any answers/results/plots etc. given without the corresponding R code that generated the result will not be considered. Furthermore, all code contained in your final project document must work correctly (knit early, knit often)! Please do not include any extraneous code or code which produces error messages. (Code that produces warnings is acceptable, as long as you understand what the warnings mean!)</p>
+</div>
+<div id="find-data" class="section level3">
+<h3>Find data:</h3>
+<p>Find two (!) datasets with one variable in common (e.g., dates, times, states, counties, countries, sports players), both with at least 50 observations (i.e., rows) in each. Please think very carefully about whether it makes sense to combine your datasets! If you find one dataset with 50 patients and it has their age, and you find another dataset with 50 <em>different</em> patients that has their ages, it makes no sense to join them based on age (you would just be pairing up random people of the same age).</p>
+<p>When combined, the resulting/final dataset must have <strong>at least 4 different variables (at least 3 numeric) in addition to the common variable</strong> (i.e., five variables total).</p>
+<p>You can have as many variables as you would like! If you found two datasets that you like but they don't have enough variables, find a third dataset with the same common variable and join all three.</p>
+</div>
+<div id="guidelines" class="section level3">
+<h3>Guidelines</h3>
+<ol style="list-style-type: decimal">
+<li><p>If the datasets are not tidy, you will need to reshape them so that every observation has its own row and every variable its own column. If the datasets are both already tidy, you will make them untidy with <code>pivot_wider()/spread()</code> and then tidy them again with <code>pivot_longer/gather()</code> to demonstrate your use of the functions. It's fine to wait until you have your descriptives to use these functions (e.g., you might want to pivot_wider() to rearrange the data to make your descriptive statistics easier to look at); it's fine long as you use them at least once!</p>
+<ul>
+<li><p>Depending on your datasets, it might be a good idea to do this before joining. For example, if you have a dataset you like with multiple measurements per year, but you want to join by year, you could average over your numeric variables to get means/year, do counts for your categoricals to get a counts/year, etc.</p></li>
+<li><p>If your data sets are already tidy, demonstrate the use of <code>pivot_longer()/gather()</code> and <code>pivot_wider()/spread()</code> on all or part of your data at some point in this document (e.g., after you have generated summary statistics in part 3, make a table of them wide instead of long).</p></li>
+</ul></li>
+</ol>
+<pre class="r"><code># Introduction- I have selected two datasets from a free
+# global website called data.world, they provide recent data
+# surrounding COVID-19 statistics. One dataset provides
+# information related to case and death rates per state and
+# contains the following variables: state,date,total
+# populatio, cumulative cases,cumulative cases per
+# 100,000,cumulative deaths,cumulative deaths per 100,000,
+# new cases, new cases 7 day rolling average, new deaths, new
+# deaths 7 day rolling average, new deaths per 100,000, and
+# new cases per 100,000. The second dataset provides
+# information related to confirmed cases and deaths for
+# specific counties within states and contains the variables:
+# last update, location type, state, county name, county name
+# long, fips code, lat, lon, NCHS urbanization,total
+# population,confirmed cases,confirmed cases per
+# 100,000,deaths, and deaths per 100,000.#
+library(tidyverse)
+library(cluster)
+state.set &lt;- read.csv(&quot;3_cases_and_deaths_by_state_timeseries.csv&quot;)
+county.set &lt;- read.csv(&quot;1_county_level_confirmed_cases.csv&quot;)
+glimpse(state.set)</code></pre>
+<pre><code>## Rows: 14,896
+## Columns: 13
+## $ state                         &lt;fct&gt; Alabama, Alabama, Alabama, Alabama, Ala…
+## $ date                          &lt;fct&gt; 2020-01-22, 2020-01-23, 2020-01-24, 202…
+## $ total_population              &lt;dbl&gt; 4887871, 4887871, 4887871, 4887871, 488…
+## $ cumulative_cases              &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
+## $ cumulative_cases_per_100_000  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
+## $ cumulative_deaths             &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
+## $ cumulative_deaths_per_100_000 &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
+## $ new_cases                     &lt;dbl&gt; NA, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
+## $ new_cases_7_day_rolling_avg   &lt;dbl&gt; NA, NA, NA, NA, NA, 0, 0, 0, 0, 0, 0, 0…
+## $ new_deaths                    &lt;dbl&gt; NA, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
+## $ new_deaths_7_day_rolling_avg  &lt;dbl&gt; NA, NA, NA, NA, NA, 0, 0, 0, 0, 0, 0, 0…
+## $ new_deaths_per_100_000        &lt;dbl&gt; NA, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
+## $ new_cases_per_100_000         &lt;dbl&gt; NA, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…</code></pre>
+<pre class="r"><code>glimpse(county.set)</code></pre>
+<pre><code>## Rows: 3,264
+## Columns: 14
+## $ last_update          &lt;fct&gt; 2020-10-14 18:24:22 UTC, 2020-10-14 18:24:22 UTC…
+## $ location_type        &lt;fct&gt; county, county, county, county, county, county, …
+## $ state                &lt;fct&gt; Alabama, Alabama, Alabama, Alabama, Alabama, Ala…
+## $ county_name          &lt;fct&gt; Autauga, Baldwin, Barbour, Bibb, Blount, Bullock…
+## $ county_name_long     &lt;fct&gt; &quot;Autauga, Alabama, US&quot;, &quot;Baldwin, Alabama, US&quot;, …
+## $ fips_code            &lt;int&gt; 1001, 1003, 1005, 1007, 1009, 1011, 1013, 1015, …
+## $ lat                  &lt;dbl&gt; 32.53953, 30.72775, 31.86826, 32.99642, 33.98211…
+## $ lon                  &lt;dbl&gt; -86.64408, -87.72207, -85.38713, -87.12511, -86.…
+## $ NCHS_urbanization    &lt;fct&gt; Medium metro, Small metro, Non-core, Large fring…
+## $ total_population     &lt;dbl&gt; 55200, 208107, 25782, 22527, 57645, 10352, 20025…
+## $ confirmed            &lt;int&gt; 1928, 6270, 950, 744, 1750, 628, 977, 3922, 1256…
+## $ confirmed_per_100000 &lt;dbl&gt; 3492.75, 3012.87, 3684.74, 3302.70, 3035.82, 606…
+## $ deaths               &lt;int&gt; 28, 66, 9, 13, 23, 16, 40, 57, 43, 14, 31, 12, 1…
+## $ deaths_per_100000    &lt;dbl&gt; 50.72, 31.71, 34.91, 57.71, 39.90, 154.56, 199.7…</code></pre>
+<pre class="r"><code>states &lt;- state.set %&gt;% na.omit
+counties &lt;- county.set %&gt;% na.omit
+untidy_states &lt;- states %&gt;% pivot_wider(names_from = &quot;state&quot;, 
+    values_from = &quot;total_population&quot;)
+glimpse(untidy_states)</code></pre>
+<pre><code>## Rows: 11,633
+## Columns: 63
+## $ date                          &lt;fct&gt; 2020-01-27, 2020-01-28, 2020-01-29, 202…
+## $ cumulative_cases              &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
+## $ cumulative_cases_per_100_000  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
+## $ cumulative_deaths             &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
+## $ cumulative_deaths_per_100_000 &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
+## $ new_cases                     &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
+## $ new_cases_7_day_rolling_avg   &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
+## $ new_deaths                    &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
+## $ new_deaths_7_day_rolling_avg  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
+## $ new_deaths_per_100_000        &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
+## $ new_cases_per_100_000         &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
+## $ Alabama                       &lt;dbl&gt; 4887871, 4887871, 4887871, 4887871, 488…
+## $ Alaska                        &lt;dbl&gt; 737438, 737438, 737438, 737438, 737438,…
+## $ Arizona                       &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
+## $ Arkansas                      &lt;dbl&gt; 3013825, 3013825, 3013825, 3013825, 301…
+## $ California                    &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
+## $ Colorado                      &lt;dbl&gt; 5695564, 5695564, 5695564, 5695564, 569…
+## $ Connecticut                   &lt;dbl&gt; 3572665, 3572665, 3572665, 3572665, 357…
+## $ Delaware                      &lt;dbl&gt; 967171, 967171, 967171, 967171, 967171,…
+## $ `District of Columbia`        &lt;dbl&gt; 702455, 702455, 702455, 702455, 702455,…
+## $ Florida                       &lt;dbl&gt; 21299325, 21299325, 21299325, 21299325,…
+## $ Georgia                       &lt;dbl&gt; 10519475, 10519475, 10519475, 10519475,…
+## $ Hawaii                        &lt;dbl&gt; 1420491, 1420491, 1420491, 1420491, 142…
+## $ Idaho                         &lt;dbl&gt; 1754208, 1754208, 1754208, 1754208, 175…
+## $ Illinois                      &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
+## $ Indiana                       &lt;dbl&gt; 6691878, 6691878, 6691878, 6691878, 669…
+## $ Iowa                          &lt;dbl&gt; 3156145, 3156145, 3156145, 3156145, 315…
+## $ Kansas                        &lt;dbl&gt; 2911510, 2911510, 2911510, 2911510, 291…
+## $ Kentucky                      &lt;dbl&gt; 4468402, 4468402, 4468402, 4468402, 446…
+## $ Louisiana                     &lt;dbl&gt; 4659978, 4659978, 4659978, 4659978, 465…
+## $ Maine                         &lt;dbl&gt; 1338404, 1338404, 1338404, 1338404, 133…
+## $ Maryland                      &lt;dbl&gt; 6042718, 6042718, 6042718, 6042718, 604…
+## $ Massachusetts                 &lt;dbl&gt; 6902149, 6902149, NA, NA, NA, NA, NA, N…
+## $ Michigan                      &lt;dbl&gt; 9995915, 9995915, 9995915, 9995915, 999…
+## $ Minnesota                     &lt;dbl&gt; 5611179, 5611179, 5611179, 5611179, 561…
+## $ Mississippi                   &lt;dbl&gt; 2986530, 2986530, 2986530, 2986530, 298…
+## $ Missouri                      &lt;dbl&gt; 6126452, 6126452, 6126452, 6126452, 612…
+## $ Montana                       &lt;dbl&gt; 1062305, 1062305, 1062305, 1062305, 106…
+## $ Nebraska                      &lt;dbl&gt; 1929268, 1929268, 1929268, 1929268, 192…
+## $ Nevada                        &lt;dbl&gt; 3034392, 3034392, 3034392, 3034392, 303…
+## $ `New Hampshire`               &lt;dbl&gt; 1356458, 1356458, 1356458, 1356458, 135…
+## $ `New Jersey`                  &lt;dbl&gt; 8908520, 8908520, 8908520, 8908520, 890…
+## $ `New Mexico`                  &lt;dbl&gt; 2095428, 2095428, 2095428, 2095428, 209…
+## $ `New York`                    &lt;dbl&gt; 19542209, 19542209, 19542209, 19542209,…
+## $ `North Carolina`              &lt;dbl&gt; 10383620, 10383620, 10383620, 10383620,…
+## $ `North Dakota`                &lt;dbl&gt; 760077, 760077, 760077, 760077, 760077,…
+## $ Ohio                          &lt;dbl&gt; 11689442, 11689442, 11689442, 11689442,…
+## $ Oklahoma                      &lt;dbl&gt; 3943079, 3943079, 3943079, 3943079, 394…
+## $ Oregon                        &lt;dbl&gt; 4190713, 4190713, 4190713, 4190713, 419…
+## $ Pennsylvania                  &lt;dbl&gt; 12807060, 12807060, 12807060, 12807060,…
+## $ `Puerto Rico`                 &lt;dbl&gt; 3195153, 3195153, 3195153, 3195153, 319…
+## $ `Rhode Island`                &lt;dbl&gt; 1057315, 1057315, 1057315, 1057315, 105…
+## $ `South Carolina`              &lt;dbl&gt; 5084127, 5084127, 5084127, 5084127, 508…
+## $ `South Dakota`                &lt;dbl&gt; 882235, 882235, 882235, 882235, 882235,…
+## $ Tennessee                     &lt;dbl&gt; 6770010, 6770010, 6770010, 6770010, 677…
+## $ Texas                         &lt;dbl&gt; 28701845, 28701845, 28701845, 28701845,…
+## $ Utah                          &lt;dbl&gt; 3161105, 3161105, 3161105, 3161105, 316…
+## $ Vermont                       &lt;dbl&gt; 626299, 626299, 626299, 626299, 626299,…
+## $ Virginia                      &lt;dbl&gt; 8517685, 8517685, 8517685, 8517685, 851…
+## $ Washington                    &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
+## $ `West Virginia`               &lt;dbl&gt; 1805832, 1805832, 1805832, 1805832, 180…
+## $ Wisconsin                     &lt;dbl&gt; 5813568, 5813568, 5813568, 5813568, 581…
+## $ Wyoming                       &lt;dbl&gt; 577737, 577737, 577737, 577737, 577737,…</code></pre>
+<pre class="r"><code>untidy_states %&gt;% pivot_longer(cols = c(12:63), names_to = &quot;state&quot;, 
+    values_to = &quot;total_population&quot;) %&gt;% glimpse()</code></pre>
+<pre><code>## Rows: 604,916
+## Columns: 13
+## $ date                          &lt;fct&gt; 2020-01-27, 2020-01-27, 2020-01-27, 202…
+## $ cumulative_cases              &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
+## $ cumulative_cases_per_100_000  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
+## $ cumulative_deaths             &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
+## $ cumulative_deaths_per_100_000 &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
+## $ new_cases                     &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
+## $ new_cases_7_day_rolling_avg   &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
+## $ new_deaths                    &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
+## $ new_deaths_7_day_rolling_avg  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
+## $ new_deaths_per_100_000        &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
+## $ new_cases_per_100_000         &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
+## $ state                         &lt;chr&gt; &quot;Alabama&quot;, &quot;Alaska&quot;, &quot;Arizona&quot;, &quot;Arkans…
+## $ total_population              &lt;dbl&gt; 4887871, 737438, NA, 3013825, NA, 56955…</code></pre>
+<pre class="r"><code># I have demonstrated my ability to tidy data by using
+# pivot_wider on my first data set to make it messy and then
+# re-tidying my dataset using the pivot_longer section.
+# Essentially, I made separate columns for each state and
+# their population and then re-organized into singular
+# columns.#</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li><p>Join your 2+ separate data sources into a single dataset based on a common ID variable! If you can't find a good pair datasets to join, you may split one main dataset into two different datasets with a common ID variable in each, and then join them back together based on that common ID, but this is obviously less than ideal.</p>
+<ul>
+<li>You will document the type of join that you do (left/right/inner/full), including a discussion of how many observations were in each dataset, which observations in each dataset were dropped (if any) and why you chose this particular join.</li>
+</ul></li>
+</ol>
+</div>
+</div>
+<div id="i-selected-a-full-join-because-i-wanted-my-datasets-to-overlap-on-both-the-x-and-y-axis-insuring-none-of-the-original-datasets-were-lost.-after-comparing-the-number-of-rows-in-both-independent-and-joined-datasets-i-do-not-believe-i-lost-any-observations-espcially-by-using-full-join." class="section level1">
+<h1>I selected a full join because I wanted my datasets to overlap on both the x and y-axis insuring none of the original datasets were lost. After comparing the number of rows in both independent and joined datasets I do not believe I lost any observations, espcially by using full join.</h1>
+<pre class="r"><code>glimpse(states)</code></pre>
+<pre><code>## Rows: 13,570
+## Columns: 13
+## $ state                         &lt;fct&gt; Alabama, Alabama, Alabama, Alabama, Ala…
+## $ date                          &lt;fct&gt; 2020-01-27, 2020-01-28, 2020-01-29, 202…
+## $ total_population              &lt;dbl&gt; 4887871, 4887871, 4887871, 4887871, 488…
+## $ cumulative_cases              &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
+## $ cumulative_cases_per_100_000  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
+## $ cumulative_deaths             &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
+## $ cumulative_deaths_per_100_000 &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
+## $ new_cases                     &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
+## $ new_cases_7_day_rolling_avg   &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
+## $ new_deaths                    &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
+## $ new_deaths_7_day_rolling_avg  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
+## $ new_deaths_per_100_000        &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
+## $ new_cases_per_100_000         &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …</code></pre>
+<pre class="r"><code>glimpse(counties)</code></pre>
+<pre><code>## Rows: 3,192
+## Columns: 14
+## $ last_update          &lt;fct&gt; 2020-10-14 18:24:22 UTC, 2020-10-14 18:24:22 UTC…
+## $ location_type        &lt;fct&gt; county, county, county, county, county, county, …
+## $ state                &lt;fct&gt; Alabama, Alabama, Alabama, Alabama, Alabama, Ala…
+## $ county_name          &lt;fct&gt; Autauga, Baldwin, Barbour, Bibb, Blount, Bullock…
+## $ county_name_long     &lt;fct&gt; &quot;Autauga, Alabama, US&quot;, &quot;Baldwin, Alabama, US&quot;, …
+## $ fips_code            &lt;int&gt; 1001, 1003, 1005, 1007, 1009, 1011, 1013, 1015, …
+## $ lat                  &lt;dbl&gt; 32.53953, 30.72775, 31.86826, 32.99642, 33.98211…
+## $ lon                  &lt;dbl&gt; -86.64408, -87.72207, -85.38713, -87.12511, -86.…
+## $ NCHS_urbanization    &lt;fct&gt; Medium metro, Small metro, Non-core, Large fring…
+## $ total_population     &lt;dbl&gt; 55200, 208107, 25782, 22527, 57645, 10352, 20025…
+## $ confirmed            &lt;int&gt; 1928, 6270, 950, 744, 1750, 628, 977, 3922, 1256…
+## $ confirmed_per_100000 &lt;dbl&gt; 3492.75, 3012.87, 3684.74, 3302.70, 3035.82, 606…
+## $ deaths               &lt;int&gt; 28, 66, 9, 13, 23, 16, 40, 57, 43, 14, 31, 12, 1…
+## $ deaths_per_100000    &lt;dbl&gt; 50.72, 31.71, 34.91, 57.71, 39.90, 154.56, 199.7…</code></pre>
+<pre class="r"><code>covid.dataset &lt;- states %&gt;% full_join(counties, by = c(state = &quot;state&quot;))
+glimpse(covid.dataset)</code></pre>
+<pre><code>## Rows: 832,926
+## Columns: 26
+## $ state                         &lt;fct&gt; Alabama, Alabama, Alabama, Alabama, Ala…
+## $ date                          &lt;fct&gt; 2020-01-27, 2020-01-27, 2020-01-27, 202…
+## $ total_population.x            &lt;dbl&gt; 4887871, 4887871, 4887871, 4887871, 488…
+## $ cumulative_cases              &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
+## $ cumulative_cases_per_100_000  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
+## $ cumulative_deaths             &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
+## $ cumulative_deaths_per_100_000 &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
+## $ new_cases                     &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
+## $ new_cases_7_day_rolling_avg   &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
+## $ new_deaths                    &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
+## $ new_deaths_7_day_rolling_avg  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
+## $ new_deaths_per_100_000        &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
+## $ new_cases_per_100_000         &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
+## $ last_update                   &lt;fct&gt; 2020-10-14 18:24:22 UTC, 2020-10-14 18:…
+## $ location_type                 &lt;fct&gt; county, county, county, county, county,…
+## $ county_name                   &lt;fct&gt; Autauga, Baldwin, Barbour, Bibb, Blount…
+## $ county_name_long              &lt;fct&gt; &quot;Autauga, Alabama, US&quot;, &quot;Baldwin, Alaba…
+## $ fips_code                     &lt;int&gt; 1001, 1003, 1005, 1007, 1009, 1011, 101…
+## $ lat                           &lt;dbl&gt; 32.53953, 30.72775, 31.86826, 32.99642,…
+## $ lon                           &lt;dbl&gt; -86.64408, -87.72207, -85.38713, -87.12…
+## $ NCHS_urbanization             &lt;fct&gt; Medium metro, Small metro, Non-core, La…
+## $ total_population.y            &lt;dbl&gt; 55200, 208107, 25782, 22527, 57645, 103…
+## $ confirmed                     &lt;int&gt; 1928, 6270, 950, 744, 1750, 628, 977, 3…
+## $ confirmed_per_100000          &lt;dbl&gt; 3492.75, 3012.87, 3684.74, 3302.70, 303…
+## $ deaths                        &lt;int&gt; 28, 66, 9, 13, 23, 16, 40, 57, 43, 14, …
+## $ deaths_per_100000             &lt;dbl&gt; 50.72, 31.71, 34.91, 57.71, 39.90, 154.…</code></pre>
+<ol start="3" style="list-style-type: decimal">
+<li><p>Create summary statistics</p>
+<ul>
+<li><p>Use <em>all six</em> core <code>dplyr</code> functions (<code>filter, select, arrange, group_by, mutate, summarize</code>) to manipulate and explore your dataset. For mutate, create a new variable that is a function of at least one other variable, preferably using a dplyr vector function (see dplyr cheatsheet). It's totally fine to use the <code>_if</code>, <code>_at</code>, <code>_all</code> versions of mutate/summarize instead (indeed, it is encouraged if you have lots of variables)</p></li>
+<li><p>Create summary statistics (<code>mean, sd, var, n, quantile, min, max, n_distinct, cor</code>, etc) for each of your numeric variables both overall and after grouping by one of your categorical variables (either together or one-at-a-time; if you have two categorical variables, try to include at least one statistic based on a grouping of two categorical variables simultaneously). If you do not have any categorical variables, create one using mutate (e.g., with <code>case_when</code> or <code>ifelse</code>) to satisfy the <code>group_by</code> requirements above. Ideally, you will find a way to show these summary statistics in an easy-to-read table (e.g., by reshaping). (You might explore the kable package for making pretty tables!) If you have lots of numeric variables (e.g., 10+), or your categorical variables have too many categories, just pick a few (either numeric variables or categories of a categorical variable) and summarize based on those. It would be a good idea to show a correlation matrix for your numeric variables (you will need it to make one of your plots).</p></li>
+</ul></li>
+</ol>
+<pre class="r"><code>covid.dataset %&gt;% na.omit %&gt;% summarize(mean(total_population.y), 
+    sd = sd(total_population.y), var(total_population.y), min(total_population.y), 
+    max(total_population.y), n_distinct(total_population.y), 
+    quantile(total_population.y))</code></pre>
+<pre><code>##   mean(total_population.y)       sd var(total_population.y)
+## 1                 101965.2 327398.7            107189913650
+## 2                 101965.2 327398.7            107189913650
+## 3                 101965.2 327398.7            107189913650
+## 4                 101965.2 327398.7            107189913650
+## 5                 101965.2 327398.7            107189913650
+##   min(total_population.y) max(total_population.y)
+## 1                     102                10098052
+## 2                     102                10098052
+## 3                     102                10098052
+## 4                     102                10098052
+## 5                     102                10098052
+##   n_distinct(total_population.y) quantile(total_population.y)
+## 1                           3134                          102
+## 2                           3134                        11355
+## 3                           3134                        26219
+## 4                           3134                        66939
+## 5                           3134                     10098052</code></pre>
+<pre class="r"><code>covid.dataset %&gt;% na.omit %&gt;% summarize(mean(deaths), sd = sd(deaths), 
+    var(deaths), min(deaths), max(deaths), n_distinct(deaths), 
+    quantile(deaths))</code></pre>
+<pre><code>##   mean(deaths)       sd var(deaths) min(deaths) max(deaths) n_distinct(deaths)
+## 1     67.10269 330.1161    108976.6           0        7356                328
+## 2     67.10269 330.1161    108976.6           0        7356                328
+## 3     67.10269 330.1161    108976.6           0        7356                328
+## 4     67.10269 330.1161    108976.6           0        7356                328
+## 5     67.10269 330.1161    108976.6           0        7356                328
+##   quantile(deaths)
+## 1                0
+## 2                2
+## 3                8
+## 4               30
+## 5             7356</code></pre>
+<pre class="r"><code>covid.dataset %&gt;% na.omit %&gt;% summarize(mean(confirmed), sd = sd(confirmed), 
+    var(confirmed), min(confirmed), max(confirmed), n_distinct(confirmed), 
+    quantile(confirmed))</code></pre>
+<pre><code>##   mean(confirmed)       sd var(confirmed) min(confirmed) max(confirmed)
+## 1        2444.512 9576.623       91711716              0         283793
+## 2        2444.512 9576.623       91711716              0         283793
+## 3        2444.512 9576.623       91711716              0         283793
+## 4        2444.512 9576.623       91711716              0         283793
+## 5        2444.512 9576.623       91711716              0         283793
+##   n_distinct(confirmed) quantile(confirmed)
+## 1                  1758                   0
+## 2                  1758                 175
+## 3                  1758                 511
+## 4                  1758                1459
+## 5                  1758              283793</code></pre>
+<pre class="r"><code>covid.dataset %&gt;% na.omit %&gt;% summarize(mean(cumulative_cases), 
+    sd = sd(cumulative_cases), var(cumulative_cases), min(cumulative_cases), 
+    max(cumulative_cases), n_distinct(cumulative_cases), quantile(cumulative_cases))</code></pre>
+<pre><code>##   mean(cumulative_cases)       sd var(cumulative_cases) min(cumulative_cases)
+## 1               71191.46 136336.7           18587698727                     0
+## 2               71191.46 136336.7           18587698727                     0
+## 3               71191.46 136336.7           18587698727                     0
+## 4               71191.46 136336.7           18587698727                     0
+## 5               71191.46 136336.7           18587698727                     0
+##   max(cumulative_cases) n_distinct(cumulative_cases) quantile(cumulative_cases)
+## 1                861310                         9617                          0
+## 2                861310                         9617                        770
+## 3                861310                         9617                      19260
+## 4                861310                         9617                      75408
+## 5                861310                         9617                     861310</code></pre>
+<pre class="r"><code>covid.dataset %&gt;% na.omit %&gt;% summarize(mean(cumulative_deaths), 
+    sd = sd(cumulative_deaths), var(cumulative_deaths), min(cumulative_deaths), 
+    max(cumulative_deaths), n_distinct(cumulative_deaths), quantile(cumulative_deaths))</code></pre>
+<pre><code>##   mean(cumulative_deaths)       sd var(cumulative_deaths)
+## 1                2139.959 4524.501               20471106
+## 2                2139.959 4524.501               20471106
+## 3                2139.959 4524.501               20471106
+## 4                2139.959 4524.501               20471106
+## 5                2139.959 4524.501               20471106
+##   min(cumulative_deaths) max(cumulative_deaths) n_distinct(cumulative_deaths)
+## 1                      0                  33306                          4117
+## 2                      0                  33306                          4117
+## 3                      0                  33306                          4117
+## 4                      0                  33306                          4117
+## 5                      0                  33306                          4117
+##   quantile(cumulative_deaths)
+## 1                           0
+## 2                          16
+## 3                         477
+## 4                        2125
+## 5                       33306</code></pre>
+<pre class="r"><code>state.population &lt;- covid.dataset %&gt;% na.omit %&gt;% group_by(state) %&gt;% 
+    summarize(state_mean_population = mean(total_population.y), 
+        sd = sd(total_population.y), variance = var(total_population.y), 
+        smallest_pop = min(total_population.y), largest_pop = max(total_population.y), 
+        unique.pop = n_distinct(total_population.y), quantile = quantile(total_population.y))
+glimpse(state.population)</code></pre>
+<pre><code>## Rows: 260
+## Columns: 8
+## Groups: state [52]
+## $ state                 &lt;fct&gt; Alabama, Alabama, Alabama, Alabama, Alabama, Al…
+## $ state_mean_population &lt;dbl&gt; 72607.16, 72607.16, 72607.16, 72607.16, 72607.1…
+## $ sd                    &lt;dbl&gt; 105396.06, 105396.06, 105396.06, 105396.06, 105…
+## $ variance              &lt;dbl&gt; 1.110833e+10, 1.110833e+10, 1.110833e+10, 1.110…
+## $ smallest_pop          &lt;dbl&gt; 8426, 8426, 8426, 8426, 8426, 689, 689, 689, 68…
+## $ largest_pop           &lt;dbl&gt; 659892, 659892, 659892, 659892, 659892, 296112,…
+## $ unique.pop            &lt;int&gt; 67, 67, 67, 67, 67, 26, 26, 26, 26, 26, 15, 15,…
+## $ quantile              &lt;dbl&gt; 8426.0, 17124.0, 33826.0, 82313.0, 659892.0, 68…</code></pre>
+<pre class="r"><code>state.death.rate &lt;- covid.dataset %&gt;% na.omit %&gt;% group_by(state) %&gt;% 
+    summarize(state_mean_death_rate = mean(deaths), sd = sd(deaths), 
+        variance = var(deaths), lowest_death_rate = min(deaths), 
+        largest_death_rate = max(deaths), unique_death = n_distinct(deaths), 
+        quantile = quantile(deaths))
+glimpse(state.death.rate)</code></pre>
+<pre><code>## Rows: 260
+## Columns: 8
+## Groups: state [52]
+## $ state                 &lt;fct&gt; Alabama, Alabama, Alabama, Alabama, Alabama, Al…
+## $ state_mean_death_rate &lt;dbl&gt; 40.388060, 40.388060, 40.388060, 40.388060, 40.…
+## $ sd                    &lt;dbl&gt; 60.542566, 60.542566, 60.542566, 60.542566, 60.…
+## $ variance              &lt;dbl&gt; 3665.40230, 3665.40230, 3665.40230, 3665.40230,…
+## $ lowest_death_rate     &lt;int&gt; 3, 3, 3, 3, 3, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0,…
+## $ largest_death_rate    &lt;int&gt; 362, 362, 362, 362, 362, 41, 41, 41, 41, 41, 34…
+## $ unique_death          &lt;int&gt; 43, 43, 43, 43, 43, 6, 6, 6, 6, 6, 15, 15, 15, …
+## $ quantile              &lt;dbl&gt; 3, 12, 25, 41, 362, 0, 0, 0, 1, 41, 1, 61, 145,…</code></pre>
+<pre class="r"><code>state.confirmed.cases &lt;- covid.dataset %&gt;% na.omit %&gt;% group_by(state) %&gt;% 
+    summarize(state_mean_confirmed_case = mean(confirmed), sd = sd(confirmed), 
+        variance = var(confirmed), min(confirmed), max(confirmed), 
+        unique_death = n_distinct(confirmed), quantile = quantile(confirmed))
+glimpse(state.confirmed.cases)</code></pre>
+<pre><code>## Rows: 260
+## Columns: 8
+## Groups: state [52]
+## $ state                     &lt;fct&gt; Alabama, Alabama, Alabama, Alabama, Alabama…
+## $ state_mean_confirmed_case &lt;dbl&gt; 2507.1194, 2507.1194, 2507.1194, 2507.1194,…
+## $ sd                        &lt;dbl&gt; 3490.290, 3490.290, 3490.290, 3490.290, 349…
+## $ variance                  &lt;dbl&gt; 12182123, 12182123, 12182123, 12182123, 121…
+## $ `min(confirmed)`          &lt;int&gt; 190, 190, 190, 190, 190, 5, 5, 5, 5, 5, 66,…
+## $ `max(confirmed)`          &lt;int&gt; 21746, 21746, 21746, 21746, 21746, 5699, 56…
+## $ unique_death              &lt;int&gt; 65, 65, 65, 65, 65, 24, 24, 24, 24, 24, 15,…
+## $ quantile                  &lt;dbl&gt; 190.0, 667.0, 1284.0, 2590.0, 21746.0, 5.0,…</code></pre>
+<pre class="r"><code>state.cumulative.cases &lt;- covid.dataset %&gt;% na.omit %&gt;% group_by(state) %&gt;% 
+    summarize(state_mean_cumulative_case = mean(cumulative_cases), 
+        sd = sd(cumulative_cases), variance = var(cumulative_cases), 
+        min(cumulative_cases), max(cumulative_cases), unique_death = n_distinct(cumulative_cases), 
+        quantile = quantile(cumulative_cases))
+glimpse(state.cumulative.cases)</code></pre>
+<pre><code>## Rows: 260
+## Columns: 8
+## Groups: state [52]
+## $ state                      &lt;fct&gt; Alabama, Alabama, Alabama, Alabama, Alabam…
+## $ state_mean_cumulative_case &lt;dbl&gt; 49439.732, 49439.732, 49439.732, 49439.732…
+## $ sd                         &lt;dbl&gt; 56029.696, 56029.696, 56029.696, 56029.696…
+## $ variance                   &lt;dbl&gt; 3139326795, 3139326795, 3139326795, 313932…
+## $ `min(cumulative_cases)`    &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, …
+## $ `max(cumulative_cases)`    &lt;int&gt; 167193, 167193, 167193, 167193, 167193, 10…
+## $ unique_death               &lt;int&gt; 215, 215, 215, 215, 215, 203, 203, 203, 20…
+## $ quantile                   &lt;dbl&gt; 0, 1060, 19387, 101334, 167193, 0, 132, 52…</code></pre>
+<pre class="r"><code>state.cumulative.deaths &lt;- covid.dataset %&gt;% na.omit %&gt;% group_by(state) %&gt;% 
+    summarize(state_mean_cumulative_death = mean(cumulative_deaths), 
+        sd = sd(cumulative_deaths), variance = var(cumulative_deaths), 
+        min(cumulative_deaths), max(cumulative_deaths), unique_death = n_distinct(cumulative_deaths), 
+        quantile = quantile(cumulative_deaths))
+glimpse(state.cumulative.cases)</code></pre>
+<pre><code>## Rows: 260
+## Columns: 8
+## Groups: state [52]
+## $ state                      &lt;fct&gt; Alabama, Alabama, Alabama, Alabama, Alabam…
+## $ state_mean_cumulative_case &lt;dbl&gt; 49439.732, 49439.732, 49439.732, 49439.732…
+## $ sd                         &lt;dbl&gt; 56029.696, 56029.696, 56029.696, 56029.696…
+## $ variance                   &lt;dbl&gt; 3139326795, 3139326795, 3139326795, 313932…
+## $ `min(cumulative_cases)`    &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, …
+## $ `max(cumulative_cases)`    &lt;int&gt; 167193, 167193, 167193, 167193, 167193, 10…
+## $ unique_death               &lt;int&gt; 215, 215, 215, 215, 215, 203, 203, 203, 20…
+## $ quantile                   &lt;dbl&gt; 0, 1060, 19387, 101334, 167193, 0, 132, 52…</code></pre>
+<pre class="r"><code>covid.dataset %&gt;% select(state, total_population.y, deaths) %&gt;% 
+    filter(!is.na(deaths)) %&gt;% group_by(state) %&gt;% mutate(state.death = sum(deaths), 
+    state.pop = sum(total_population.y), fatality.prop = state.death/state.pop) %&gt;% 
+    distinct(fatality.prop) %&gt;% arrange(desc(fatality.prop))</code></pre>
+<pre><code>## # A tibble: 52 x 2
+## # Groups:   state [52]
+##    state                fatality.prop
+##    &lt;fct&gt;                        &lt;dbl&gt;
+##  1 New Jersey                0.00182 
+##  2 New York                  0.00170 
+##  3 Massachusetts             0.00141 
+##  4 Connecticut               0.00127 
+##  5 Louisiana                 0.00118 
+##  6 Rhode Island              0.00107 
+##  7 Mississippi               0.00105 
+##  8 District of Columbia      0.000931
+##  9 Arizona                   0.000831
+## 10 Florida                   0.000757
+## # … with 42 more rows</code></pre>
+<ol start="4" style="list-style-type: decimal">
+<li><p>Make visualizations (three plots)</p>
+<ul>
+<li>Make a correlation heatmap of your numeric variables</li>
+<li>Create at least two additional plots of your choice with ggplot that highlight some of the more interesting features of your data.</li>
+<li>Each plot (besides the heatmap) should have at least three variables mapped to separate aesthetics</li>
+<li>Each should use different geoms (don't do two geom_bars)</li>
+<li>At least one plot should include <code>stat=&quot;summary&quot;</code></li>
+<li>Each plot should include a supporting paragraph describing the relationships that are being visualized and any trends that are apparent
+<ul>
+<li>It is fine to include more, but limit yourself to 4. Plots should avoid being redundant! Four bad plots will get a lower grade than two good plots, all else being equal.</li>
+</ul></li>
+<li>Make them pretty! Use correct labels, etc.</li>
+</ul></li>
+</ol>
+<pre class="r"><code>corcovid &lt;- covid.dataset %&gt;% na.omit %&gt;% select(is.numeric) %&gt;% 
+    cor(use = &quot;pair&quot;)
+glimpse(corcovid)</code></pre>
+<pre><code>##  num [1:19, 1:19] 1 0.5414 0.0845 0.4261 0.1326 ...
+##  - attr(*, &quot;dimnames&quot;)=List of 2
+##   ..$ : chr [1:19] &quot;total_population.x&quot; &quot;cumulative_cases&quot; &quot;cumulative_cases_per_100_000&quot; &quot;cumulative_deaths&quot; ...
+##   ..$ : chr [1:19] &quot;total_population.x&quot; &quot;cumulative_cases&quot; &quot;cumulative_cases_per_100_000&quot; &quot;cumulative_deaths&quot; ...</code></pre>
+<pre class="r"><code>tidycovid &lt;- corcovid %&gt;% as.data.frame %&gt;% rownames_to_column(&quot;var1&quot;) %&gt;% 
+    pivot_longer(-1, names_to = &quot;var2&quot;, values_to = &quot;correlation&quot;)
+glimpse(tidycovid)</code></pre>
+<pre><code>## Rows: 361
+## Columns: 3
+## $ var1        &lt;chr&gt; &quot;total_population.x&quot;, &quot;total_population.x&quot;, &quot;total_popula…
+## $ var2        &lt;chr&gt; &quot;total_population.x&quot;, &quot;cumulative_cases&quot;, &quot;cumulative_cas…
+## $ correlation &lt;dbl&gt; 1.000000000, 0.541436561, 0.084508111, 0.426146903, 0.132…</code></pre>
+<pre class="r"><code>tidycovid %&gt;% ggplot(aes(var1, var2, fill = correlation)) + geom_tile() + 
+    scale_fill_gradient2(low = &quot;red&quot;, mid = &quot;orange&quot;, high = &quot;pink&quot;) + 
+    geom_text(aes(label = round(correlation, 2)), color = &quot;black&quot;, 
+        size = 1) + theme(axis.text.x = element_text(angle = 90, 
+    hjust = 1)) + coord_fixed()</code></pre>
+<p><img src="../Project.lala1_files/figure-html/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># After examining my heat-map for correlations between my
+# COVID-related datasets I can see that a majority of my
+# correlations are middle or low correlations, so relatively
+# weak. However I did have a few isolated, strong
+# correlations between anticipated variables, such as
+# confirmed cases and cumulative deaths per 10000 people. I
+# also observed a strong correlation between population per
+# county and confirmed cases per county.Which makes sense
+# because the population within the county limits how many
+# people are at risk for exposure and a confirmed case.#
+
+death.cases.data &lt;- covid.dataset %&gt;% select(state, total_population.y, 
+    deaths, confirmed) %&gt;% filter(!is.na(deaths)) %&gt;% group_by(state) %&gt;% 
+    mutate(state.death = sum(deaths), state.pop = sum(total_population.y), 
+        fatality.prop = state.death/state.pop)
+death.cases.data %&gt;% ggplot(aes(deaths, confirmed, color = fatality.prop)) + 
+    geom_histogram(stat = &quot;summary&quot;) + ylab(&quot;Confirmed COVID Cases per County&quot;) + 
+    xlab(&quot;Deaths per County&quot;)</code></pre>
+<p><img src="../Project.lala1_files/figure-html/unnamed-chunk-4-2.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># The histogram plot depicts the relationship between county
+# COVID death occurences, county confirmed COVID cases, and
+# state-wide fatality ratios (as calculated in problem 3).
+# Intially I assumed that counties with high COVID confirmed
+# cases and deaths would have a high state fatality ratio,
+# and with a few outlyers/exceptions that is the general
+# trend seen in this graph. Specifically with the lower
+# deaths and confirmed case counties having lower state
+# fatality ratios. Although I did not expect multiple
+# counties with high death-occurences to have realitively low
+# confirmed cases.#
+
+covid.dataset %&gt;% ggplot(aes(confirmed_per_100000, total_population.x, 
+    color = state)) + geom_point() + xlab(&quot;Total State Population&quot;) + 
+    ylab(&quot;Confirmed COVID Cases per 100,000&quot;)</code></pre>
+<p><img src="../Project.lala1_files/figure-html/unnamed-chunk-4-3.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># The scatterplot depicts the relationship between confirmed
+# COVID cases per 100,000 people and total state population
+# per state. The overall trend of the scatterplot showes that
+# smaller state populations had smaller confirmed cases per
+# 100,000 people, with a few notable outlyers like Arizona
+# and Tennessee#</code></pre>
+<ol start="5" style="list-style-type: decimal">
+<li><p>Perform k-means/PAM clustering or PCA on (at least) your numeric variables.</p>
+<ul>
+<li><p>Include all steps as we discuss in class, including a visualization.</p></li>
+<li><p>If you don't have at least 3 numeric variables, or you want to cluster based on categorical variables too, convert them to factors in R, generate Gower's dissimilarity matrix on the data, and do PAM clustering on the dissimilarities.</p></li>
+<li><p>Show how you chose the final number of clusters/principal components</p></li>
+<li><p>Interpret the final clusters/principal components</p></li>
+<li><p>For every step, document what your code does (in words) and what you see in the data!</p></li>
+</ul></li>
+</ol>
+<pre class="r"><code>covid_num &lt;- covid.dataset %&gt;% na.omit %&gt;% select(where(is.numeric)) %&gt;% 
+    scale
+# This step essentially cleans the dataset and selects for
+# what we want and the scale function normalizes our data.#
+covid_pca &lt;- princomp(covid_num)
+# This function runs a principal component analysis on our
+# numerical data and renames the dataset#
+names(covid_pca)</code></pre>
+<pre><code>## [1] &quot;sdev&quot;     &quot;loadings&quot; &quot;center&quot;   &quot;scale&quot;    &quot;n.obs&quot;    &quot;scores&quot;   &quot;call&quot;</code></pre>
+<pre class="r"><code># Indicates the different informational values from our PCA,
+# we care about sdev which is the sqaure root of the
+# eigenvalue/variance#
+summary(covid_pca, loadings = T)</code></pre>
+<pre><code>## Importance of components:
+##                           Comp.1    Comp.2    Comp.3     Comp.4     Comp.5
+## Standard deviation     2.4226503 1.6476651 1.3634423 1.31605794 1.24499697
+## Proportion of Variance 0.3089075 0.1428844 0.0978409 0.09115845 0.08157996
+## Cumulative Proportion  0.3089075 0.4517919 0.5496328 0.64079121 0.72237118
+##                            Comp.6     Comp.7     Comp.8     Comp.9    Comp.10
+## Standard deviation     1.16287256 1.03351039 0.85011276 0.69998857 0.65472986
+## Proportion of Variance 0.07117233 0.05621816 0.03803645 0.02578866 0.02256167
+## Cumulative Proportion  0.79354351 0.84976166 0.88779811 0.91358678 0.93614845
+##                           Comp.11    Comp.12     Comp.13     Comp.14    Comp.15
+## Standard deviation     0.55738729 0.47645595 0.431031938 0.407719460 0.37153959
+## Proportion of Variance 0.01635163 0.01194792 0.009778356 0.008749229 0.00726536
+## Cumulative Proportion  0.95250008 0.96444800 0.974226354 0.982975583 0.99024094
+##                            Comp.16     Comp.17     Comp.18    Comp.19
+## Standard deviation     0.268410114 0.215403041 0.206650118 0.15580478
+## Proportion of Variance 0.003791793 0.002442028 0.002247596 0.00127764
+## Cumulative Proportion  0.994032736 0.996474764 0.998722360 1.00000000
+## 
+## Loadings:
+##                               Comp.1 Comp.2 Comp.3 Comp.4 Comp.5 Comp.6 Comp.7
+## total_population.x             0.232         0.213         0.337  0.359  0.225
+## cumulative_cases               0.338        -0.165  0.114  0.179  0.236       
+## cumulative_cases_per_100_000   0.261        -0.440        -0.115        -0.284
+## cumulative_deaths              0.290        -0.328  0.222  0.210         0.268
+## cumulative_deaths_per_100_000  0.242        -0.516  0.139        -0.148  0.124
+##                               Comp.8 Comp.9 Comp.10 Comp.11 Comp.12 Comp.13
+## total_population.x                           0.222   0.680   0.206   0.180 
+## cumulative_cases                      0.123 -0.140  -0.323   0.348   0.136 
+## cumulative_cases_per_100_000          0.255  0.113           0.459   0.176 
+## cumulative_deaths                           -0.114          -0.368  -0.105 
+## cumulative_deaths_per_100_000                        0.160  -0.330  -0.211 
+##                               Comp.14 Comp.15 Comp.16 Comp.17 Comp.18 Comp.19
+## total_population.x             0.109                                         
+## cumulative_cases              -0.419  -0.241                   0.111   0.471 
+## cumulative_cases_per_100_000   0.255   0.230  -0.106                  -0.426 
+## cumulative_deaths             -0.231  -0.346                  -0.162  -0.523 
+## cumulative_deaths_per_100_000  0.253   0.345                           0.489 
+##  [ reached getOption(&quot;max.print&quot;) -- omitted 14 rows ]</code></pre>
+<pre class="r"><code># Viewing the importance and loading of the different
+# principal components#
+eigval &lt;- covid_pca$sdev^2
+# square to convert standard deviations to eigen values
+varprop = round(eigval/sum(eigval), 2)
+# Function provides the proportion of each variance explained
+# by each PC
+ggplot() + geom_bar(aes(y = varprop, x = 1:19), stat = &quot;identity&quot;) + 
+    xlab(&quot;&quot;) + geom_path(aes(y = varprop, x = 1:19)) + geom_text(aes(x = 1:19, 
+    y = varprop, label = round(varprop, 2)), vjust = 1, col = &quot;white&quot;, 
+    size = 5) + scale_y_continuous(breaks = seq(0, 0.6, 0.2), 
+    labels = scales::percent) + scale_x_continuous(breaks = 1:10)</code></pre>
+<p><img src="../Project.lala1_files/figure-html/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># Visualizing our PC&#39;s and looking for the location our
+# elbow, which I believe is around PC 6 or bar-0.07#
+round(cumsum(eigval)/sum(eigval), 2)</code></pre>
+<pre><code>##  Comp.1  Comp.2  Comp.3  Comp.4  Comp.5  Comp.6  Comp.7  Comp.8  Comp.9 Comp.10 
+##    0.31    0.45    0.55    0.64    0.72    0.79    0.85    0.89    0.91    0.94 
+## Comp.11 Comp.12 Comp.13 Comp.14 Comp.15 Comp.16 Comp.17 Comp.18 Comp.19 
+##    0.95    0.96    0.97    0.98    0.99    0.99    1.00    1.00    1.00</code></pre>
+<pre class="r"><code># Showes the cumulative proportion of variance#
+eigval</code></pre>
+<pre><code>##     Comp.1     Comp.2     Comp.3     Comp.4     Comp.5     Comp.6     Comp.7 
+## 5.86923466 2.71480037 1.85897491 1.73200849 1.55001747 1.35227260 1.06814372 
+##     Comp.8     Comp.9    Comp.10    Comp.11    Comp.12    Comp.13    Comp.14 
+## 0.72269170 0.48998400 0.42867120 0.31068059 0.22701028 0.18578853 0.16623516 
+##    Comp.15    Comp.16    Comp.17    Comp.18    Comp.19 
+## 0.13804167 0.07204399 0.04639847 0.04270427 0.02427513</code></pre>
+<pre class="r"><code># Showes our eigenvalues so we can see which principal
+# components are greater than one# We will retain 6 Principal
+# Components because based off of Kaiser&#39;s rule their eigen
+# values are greater than 1.#
+summary(covid_pca, loadings = T)</code></pre>
+<pre><code>## Importance of components:
+##                           Comp.1    Comp.2    Comp.3     Comp.4     Comp.5
+## Standard deviation     2.4226503 1.6476651 1.3634423 1.31605794 1.24499697
+## Proportion of Variance 0.3089075 0.1428844 0.0978409 0.09115845 0.08157996
+## Cumulative Proportion  0.3089075 0.4517919 0.5496328 0.64079121 0.72237118
+##                            Comp.6     Comp.7     Comp.8     Comp.9    Comp.10
+## Standard deviation     1.16287256 1.03351039 0.85011276 0.69998857 0.65472986
+## Proportion of Variance 0.07117233 0.05621816 0.03803645 0.02578866 0.02256167
+## Cumulative Proportion  0.79354351 0.84976166 0.88779811 0.91358678 0.93614845
+##                           Comp.11    Comp.12     Comp.13     Comp.14    Comp.15
+## Standard deviation     0.55738729 0.47645595 0.431031938 0.407719460 0.37153959
+## Proportion of Variance 0.01635163 0.01194792 0.009778356 0.008749229 0.00726536
+## Cumulative Proportion  0.95250008 0.96444800 0.974226354 0.982975583 0.99024094
+##                            Comp.16     Comp.17     Comp.18    Comp.19
+## Standard deviation     0.268410114 0.215403041 0.206650118 0.15580478
+## Proportion of Variance 0.003791793 0.002442028 0.002247596 0.00127764
+## Cumulative Proportion  0.994032736 0.996474764 0.998722360 1.00000000
+## 
+## Loadings:
+##                               Comp.1 Comp.2 Comp.3 Comp.4 Comp.5 Comp.6 Comp.7
+## total_population.x             0.232         0.213         0.337  0.359  0.225
+## cumulative_cases               0.338        -0.165  0.114  0.179  0.236       
+## cumulative_cases_per_100_000   0.261        -0.440        -0.115        -0.284
+## cumulative_deaths              0.290        -0.328  0.222  0.210         0.268
+## cumulative_deaths_per_100_000  0.242        -0.516  0.139        -0.148  0.124
+##                               Comp.8 Comp.9 Comp.10 Comp.11 Comp.12 Comp.13
+## total_population.x                           0.222   0.680   0.206   0.180 
+## cumulative_cases                      0.123 -0.140  -0.323   0.348   0.136 
+## cumulative_cases_per_100_000          0.255  0.113           0.459   0.176 
+## cumulative_deaths                           -0.114          -0.368  -0.105 
+## cumulative_deaths_per_100_000                        0.160  -0.330  -0.211 
+##                               Comp.14 Comp.15 Comp.16 Comp.17 Comp.18 Comp.19
+## total_population.x             0.109                                         
+## cumulative_cases              -0.419  -0.241                   0.111   0.471 
+## cumulative_cases_per_100_000   0.255   0.230  -0.106                  -0.426 
+## cumulative_deaths             -0.231  -0.346                  -0.162  -0.523 
+## cumulative_deaths_per_100_000  0.253   0.345                           0.489 
+##  [ reached getOption(&quot;max.print&quot;) -- omitted 14 rows ]</code></pre>
+<pre class="r"><code># Allows us to interpret PC values in context of data. Some
+# interpretation would be that when there are high new cases
+# there is lower cumulative deaths while new deaths means
+# lower cumulative deaths.#</code></pre>
+<P style="page-break-before: always">
+
+<div id="rubric" class="section level3">
+<h3>Rubric</h3>
+<p>Prerequisite: Finding appropriate data from at least two sources per the instructions above: Failure to do this will result in a 0! You will submit a .Rmd file and a knitted document (pdf).</p>
+<div id="introduction-4-pts" class="section level4">
+<h4>0. Introduction (4 pts)</h4>
+<ul>
+<li>Write a narrative introductory paragraph or two describing the datasets you have chosen, the variables they contain, how they were acquired, and why they are interesting to you. Expand on potential associations you may expect, if any.</li>
+</ul>
+</div>
+<div id="tidying-rearranging-widelong-8-pts" class="section level4">
+<h4>1. Tidying: Rearranging Wide/Long (8 pts)</h4>
+<ul>
+<li>Tidy the datasets (using the <code>tidyr</code> functions <code>pivot_longer</code>/<code>gather</code> and/or <code>pivot_wider</code>/<code>spread</code>)</li>
+<li>If you data sets are already tidy, be sure to use those functions somewhere else in your project</li>
+<li>Document the process (describe in words what was done per the instructions)</li>
+</ul>
+</div>
+<div id="joiningmerging-8-pts" class="section level4">
+<h4>2. Joining/Merging (8 pts)</h4>
+<ul>
+<li>Join your datasets into one using a <code>dplyr</code> join function</li>
+<li>If you have multiple observations on the joining variable in either dataset, fix this by collapsing via summarize</li>
+<li>Discuss the process in words, including why you chose the join you did</li>
+<li>Discuss which cases were dropped, if any, and potential problems with this</li>
+</ul>
+</div>
+<div id="wrangling-40-pts" class="section level4">
+<h4>3. Wrangling (40 pts)</h4>
+<ul>
+<li>Use all six core <code>dplyr</code> functions in the service of generating summary statistics (18 pts)
+<ul>
+<li>Use mutate at least once to generate a variable that is a function of at least one other variable</li>
+</ul></li>
+<li>Compute at least 10 summary statistics for using summarize and summarize with group_by (18 pts)
+<ul>
+<li>Use at least 5 unique functions inside of summarize (e.g., mean, sd)</li>
+<li>At least 2 of these should group by a categorical variable. Create one by dichotomizing a numeric if necessary</li>
+<li>If applicable, at least 1 of these should group by two categorical variables</li>
+<li>Strongly encouraged to create a correlation matrix with <code>cor()</code> on your numeric variables</li>
+</ul></li>
+<li>Summarize/discuss all results in no more than two paragraphs (4 pts)</li>
+</ul>
+</div>
+<div id="visualizing-30-pts" class="section level4">
+<h4>4. Visualizing (30 pts)</h4>
+<ul>
+<li><p>Create a correlation heatmap of your numeric variables</p></li>
+<li><p>Create two effective, polished plots with ggplot</p>
+<ul>
+<li>Each plot should map 3+ variables to aesthetics</li>
+<li>Each plot should have a title and clean labeling for all mappings</li>
+<li>Change at least one default theme element and color for at least one mapping per plot</li>
+<li>For at least one plot, add more tick marks (x, y, or both) than are given by default</li>
+<li>For at least one plot, use the stat=&quot;summary&quot; function</li>
+<li>Supporting paragraph or two (for each plot) describing the relationships/trends that are apparent</li>
+</ul></li>
+</ul>
+</div>
+<div id="dimensionality-reduction-20-pts" class="section level4">
+<h4>5. Dimensionality Reduction (20 pts)</h4>
+<ul>
+<li><p>Either k-means/PAM clustering or PCA (inclusive &quot;or&quot;) should be performed on at least three numeric variables in your dataset</p>
+<ul>
+<li>All relevant steps discussed in class</li>
+<li>A visualization of the clusters or the first few principal components (using ggplot2)</li>
+<li>Supporting paragraph or two describing results found</li>
+</ul></li>
+</ul>
+</div>
+<div id="neatness" class="section level4">
+<h4>6. Neatness!</h4>
+<ul>
+<li>Your project should not knit to more than 30 or so pages (probably closer to 10)! You will lose points if you print out your entire dataset(s), have terrible formatting, etc. If you start your project in a fresh .Rmd file, you are advised to paste the set-up code from this document (lines 14-17) at the top of it: this will automatically truncate if you accidentally print out a huge dataset, etc. Imagine this is a polished report you are giving to your PI or boss to summarize your work researching a topic.</li>
+</ul>
+</div>
+</div>
+<div id="where-do-i-find-data" class="section level3">
+<h3>Where do I find data?</h3>
+<p>OK, brace yourself!</p>
+<p>You can choose ANY datasets you want that meet the above criteria for variables and observations. I'm just sitting here but off the top of my head, if you are into amusement parks, you could look at amusement-park variables, including ticket sales per day etc.; then you could join this by date in weather data. If you are interested in Game of Thrones, you could look at how the frequency of mentions of character names (plus other character variables) and the frequency of baby names in the USA...You could even take your old Biostats data and merge in new data (e.g., based on a Google forms timestamp).</p>
+<p>You could engage in some &quot;me-search&quot;: You can <a href="https://support.spotify.com/ca-en/article/data-rights-and-privacy-settings/">request your Spotify data</a> or <a href="https://help.netflix.com/en/node/101917">download Netflix viewing activity</a>, Amazon purchase history, etc. You can use your Google Fit/Fitbit/Apple watch data, etc. These can be combined (e.g., with each other, with other data sources).</p>
+<p>You can make it as serious as you want, or not, but keep in mind that you will be incorporating this project into a portfolio webpage for your final in this course, so choose something that really reflects who you are, or something that you feel will advance you in the direction you hope to move career-wise, or something that you think is really neat. On the flip side, regardless of what you pick, you will be performing all the same tasks, so it doesn't end up being that big of a deal.</p>
+<p>If you are totally clueless and have no direction at all, log into the server and type</p>
+<pre class="r"><code>data(package = .packages(all.available = TRUE))</code></pre>
+<p>This will print out a list of <strong>ALL datasets in ALL packages</strong> installed on the server (a ton)! Scroll until your eyes bleed! Actually, do not scroll that much... To start with something more manageable, just run the command on your own computer, or just run <code>data()</code> to bring up the datasets in your current environment. To read more about a dataset, do <code>?packagename::datasetname</code>.</p>
+<p>If it is easier for you, and in case you don't have many packages installed, a list of R datasets from a few common packages (also downloadable in CSV format) is given at the following website: <a href="https://vincentarelbundock.github.io/Rdatasets/datasets.html" class="uri">https://vincentarelbundock.github.io/Rdatasets/datasets.html</a> (including types/numbers of variables in each)</p>
+<ul>
+<li><p>A good package to download for fun/relevant data is <code>fivethiryeight</code>. Just run <code>install.packages(&quot;fivethirtyeight&quot;), load the packages with</code>library(fivethirtyeight)<code>, run</code>data()`, and then scroll down to view the datasets. Here is an online list of all 127 datasets (with links to the 538 articles). Lots of sports, politics, current events, etc: <a href="https://cran.r-project.org/web/packages/fivethirtyeight/vignettes/fivethirtyeight.html" class="uri">https://cran.r-project.org/web/packages/fivethirtyeight/vignettes/fivethirtyeight.html</a></p></li>
+<li><p>If you have already started to specialize (e.g., ecology, epidemiology) you might look at discipline-specific R packages (vegan, epi, respectively). We will be using some tools from these packages later in the course, but they come with lots of data too, which you can explore according to the directions above</p></li>
+<li><p>However, you <em>emphatically DO NOT</em> have to use datasets available via R packages! In fact, I would much prefer it if you found the data from completely separate sources and brought them together (a much more realistic experience in the real world)! You can even reuse data from your SDS328M project, provided it shares a variable in common with other data which allows you to merge the two together (e.g., if you still had the timestamp, you could look up the weather that day: <a href="https://www.wunderground.com/history/" class="uri">https://www.wunderground.com/history/</a>). If you work in a research lab or have access to old data, you could potentially merge it with new data from your lab!</p></li>
+<li><p>Here is a curated list of interesting datasets (read-only spreadsheet format): <a href="https://docs.google.com/spreadsheets/d/1wZhPLMCHKJvwOkP4juclhjFgqIY8fQFMemwKL2c64vk/edit" class="uri">https://docs.google.com/spreadsheets/d/1wZhPLMCHKJvwOkP4juclhjFgqIY8fQFMemwKL2c64vk/edit</a></p></li>
+<li><p>Here is another great compilation of datasets: <a href="https://github.com/rfordatascience/tidytuesday" class="uri">https://github.com/rfordatascience/tidytuesday</a></p></li>
+<li><p>Here is the UCI Machine Learning Repository: <a href="https://archive.ics.uci.edu/ml/index.php" class="uri">https://archive.ics.uci.edu/ml/index.php</a></p>
+<ul>
+<li>See also <a href="https://en.wikipedia.org/wiki/List_of_datasets_for_machine-learning_research#Biological_data" class="uri">https://en.wikipedia.org/wiki/List_of_datasets_for_machine-learning_research#Biological_data</a></li>
+</ul></li>
+<li><p>Here is another good general place to look: <a href="https://www.kaggle.com/datasets" class="uri">https://www.kaggle.com/datasets</a></p></li>
+<li><p>To help narrow your search down or to see interesting variable ideas, check out <a href="https://www.tylervigen.com/spurious-correlations" class="uri">https://www.tylervigen.com/spurious-correlations</a>. This is the spurious correlations website, and it is fun, but if you look at the bottom of each plot you will see sources for the data. This is a good place to find very general data (or at least get a sense of where you can scrape data together from)!</p></li>
+<li><p>If you are interested in medical data, check out www.countyhealthrankings.org</p></li>
+<li><p>If you are interested in scraping UT data, the university makes <em>loads</em> of data public (e.g., beyond just professor CVs and syllabi). Check out all the data that is available in the statistical handbooks: <a href="https://reports.utexas.edu/statistical-handbook" class="uri">https://reports.utexas.edu/statistical-handbook</a></p></li>
+</ul>
+<div id="broader-data-sources" class="section level5">
+<h5>Broader data sources:</h5>
+<p><a href="www.data.gov">Data.gov</a> 186,000+ datasets!</p>
+<p><a href="Social%20Explorer">Social Explorer</a> is a nice interface to Census and American Community Survey data (more user-friendly than the government sites). May need to sign up for a free trial.</p>
+<p><a href="www.bls.gov">U.S. Bureau of Labor Statistics</a></p>
+<p><a href="www.census.gov">U.S. Census Bureau</a></p>
+<p><a href="www.gapminder.org/data">Gapminder</a>, data about the world.</p>
+<p>...</p>
+</div>
+</div>
+</div>
+
+            
+        <hr>         <div class="related-posts">
+                <h5>Related Posts</h5>
+                
+              </div> 
+            </div>
+          </div>
+
+   <hr>  <div class="disqus">
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+
+    (function() {
+      
+      
+      if (window.location.hostname == "localhost")
+        return;
+
+      var disqus_shortname = '';
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  <a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div> 
+        </div>
+      </div>
+    </div>
+
+    
+    <footer>
+  <div id="footer">
+    <div class="container">
+      <p class="text-muted">&copy; All rights reserved. Powered by <a href="https://gohugo.io/">Hugo</a> and
+      <a href="http://www.github.com/nurlansu/hugo-sustain/">sustain</a> with ♥</p>
+    </div>
+  </div>
+</footer>
+<div class="footer"></div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="../js/docs.min.js"></script>
+<script src="../js/main.js"></script>
+
+<script src="../js/ie10-viewport-bug-workaround.js"></script>
+
+
+    
+  </body>
+</html>
