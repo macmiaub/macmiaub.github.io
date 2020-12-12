@@ -18,15 +18,6 @@ import re string1=&amp;quot;Sailor.Moon nonsense nonsense nonsense Sailor.Jupite
     </item>
     
     <item>
-      <title>Project 1</title>
-      <link>/project/project1/</link>
-      <pubDate>Tue, 01 Dec 2020 00:00:00 +0000</pubDate>
-      
-      <guid>/project/project1/</guid>
-      <description> Test Project 1  </description>
-    </item>
-    
-    <item>
       <title>Project 2</title>
       <link>/project/project2/</link>
       <pubDate>Tue, 01 Dec 2020 00:00:00 +0000</pubDate>
@@ -43,6 +34,16 @@ import re string1=&amp;quot;Sailor.Moon nonsense nonsense nonsense Sailor.Jupite
       <guid>/project.lala1/</guid>
       <description>Data Wrangling and Data Exploration Instructions A knitted R Markdown document (ideally HTML) and the raw R Markdown file (as .Rmd) should both be submitted to Canvas by 11:59pm on 10/11/2020. These two documents will be graded jointly, so they must be consistent (i.e., don’t change the R Markdown file without also updating the knitted document).
 The text of the document should provide a narrative structure around your code/output. All results presented must have corresponding code.</description>
+    </item>
+    
+    <item>
+      <title>Project 1: Exploratory Data Analysis</title>
+      <link>/project/project1/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/project/project1/</guid>
+      <description>Data Wrangling and Data Exploration Instructions A knitted R Markdown document (ideally HTML) and the raw R Markdown file (as .Rmd) should both be submitted to Canvas by 11:59pm on 10/11/2020. These two documents will be graded jointly, so they must be consistent (i.e., don’t change the R Markdown file without also updating the knitted document).
+The text of the document should provide a narrative structure around your code/output.</description>
     </item>
     
     <item>

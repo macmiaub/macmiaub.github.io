@@ -18,11 +18,6 @@
   </url>
   
   <url>
-    <loc>/project/project1/</loc>
-    <lastmod>2020-12-01T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
     <loc>/project/project2/</loc>
     <lastmod>2020-12-01T00:00:00+00:00</lastmod>
   </url>
@@ -38,6 +33,10 @@
   
   <url>
     <loc>/project.lala1/</loc>
+  </url>
+  
+  <url>
+    <loc>/project/project1/</loc>
   </url>
   
   <url>
