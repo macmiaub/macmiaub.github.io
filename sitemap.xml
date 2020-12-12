@@ -18,16 +18,6 @@
   </url>
   
   <url>
-    <loc>/project/project2/</loc>
-    <lastmod>2020-12-01T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/project/</loc>
-    <lastmod>2020-12-01T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
     <loc>/categories/</loc>
   </url>
   
@@ -44,7 +34,15 @@
   </url>
   
   <url>
+    <loc>/project/project2/</loc>
+  </url>
+  
+  <url>
     <loc>/project2/</loc>
+  </url>
+  
+  <url>
+    <loc>/project/</loc>
   </url>
   
   <url>
