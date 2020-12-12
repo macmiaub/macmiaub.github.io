@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on Aubrey MacMillan</title>
+    <link>/post/</link>
+    <description>Recent content in Posts on Aubrey MacMillan</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-US</language>
+    <lastBuildDate>Fri, 11 Dec 2020 00:00:00 +0000</lastBuildDate><atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Python and Sailor Moon </title>
+      <link>/post/2020/12/11/python-and-sailor-moon/</link>
+      <pubDate>Fri, 11 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/post/2020/12/11/python-and-sailor-moon/</guid>
+      <description>  Suprisingly, there are mutliple similarities between Sailor Moon&#39;s team of heroes and Python. As Sailor Moon must execute precise, exact movements to activate her powers, so must Python users to get their desired output.
+import re string1=&amp;quot;Sailor.Moon nonsense nonsense nonsense Sailor.Jupiter nonsense nonsense nonsene Sailor.Mars nonsense nonsense nonsense nonsense nonsense Sailor.Venus nonsense nonsense nonsense Sailor.Mercury nonsense nonsense&amp;quot; sailors=re.findall(r&amp;quot;\w+\.\w+&amp;quot;,string1) print(sailors) ## [&amp;#39;Sailor.Moon&amp;#39;, &amp;#39;Sailor.Jupiter&amp;#39;, &amp;#39;Sailor.Mars&amp;#39;, &amp;#39;Sailor.Venus&amp;#39;, &amp;#39;Sailor.Mercury&amp;#39;] library(reticulate) re&amp;lt;-import(&amp;quot;re&amp;quot;) print(re) ## Module(re) </description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,26 @@
+---
+title: 'Python and Sailor Moon '
+author: ''
+date: '2020-12-11'
+slug: python-and-sailor-moon
+categories: []
+tags: []
+description: ''
+---
+![](/post/2020-12-11-python-and-sailor-moon_files/IMG_0617.JPG)
+
+*Suprisingly, there are mutliple similarities between Sailor Moon's team of heroes and Python. As Sailor Moon must execute precise, exact movements to activate her powers, so must Python users to get their desired output.*
+
+```{python}
+import re
+string1="Sailor.Moon nonsense nonsense nonsense Sailor.Jupiter nonsense nonsense nonsene Sailor.Mars nonsense nonsense nonsense nonsense nonsense Sailor.Venus nonsense nonsense nonsense Sailor.Mercury nonsense nonsense"
+sailors=re.findall(r"\w+\.\w+",string1)
+print(sailors)
+```
+
+```{r}
+library(reticulate)
+re<-import("re")
+print(re)
+```
+
